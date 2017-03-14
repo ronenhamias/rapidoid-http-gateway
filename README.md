@@ -33,6 +33,6 @@ After cloning the project and adding it to your favorite IDE:
 * run the Main as java application.
 * open your browser and open the url http://localhost:8080 (this will open the index.html)
 
-the index.html makes 3 XHR(POST) requests to the hello world service via the defined HTTP routes.
+The src/main/resources/index.html makes 3 XHR(POST) requests to the hello world service via the defined HTTP routes.
 
  
