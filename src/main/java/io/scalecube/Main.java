@@ -1,5 +1,7 @@
-package io.scalecube.rapidoid.http.gateway;
+package io.scalecube;
 
+import io.scalecube.rapidoid.http.gateway.ApiRoutes;
+import io.scalecube.rapidoid.http.gateway.RapidoidHttpGateway;
 import io.scalecube.services.Microservices;
 import io.scalecube.services.example.GreetingServiceImpl;
 import io.scalecube.services.example.api.GreetingRequest;
