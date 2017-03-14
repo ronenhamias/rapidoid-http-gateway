@@ -12,7 +12,6 @@ public class GreetingServiceImpl implements HelloWorldService {
     String responseMessage;
     if (request == null) {
       responseMessage = "greetings: unknown";
-      System.out.println(responseMessage);
     } else {
       responseMessage = "greetings: " + request.name();
     }
