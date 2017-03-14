@@ -17,30 +17,28 @@ public class Main {
   
   public static void main(String[] args) {
   
-    // run this main application and in the browser call http://localhost:8080/
+    // run this main() as java application and in the browser call http://localhost:8080/
     internalWebServer();
     
-    // seed node to the cluster
+    // seed node to the cluster.
     Microservices seed = Microservices.builder().build();
 
-    // some node that provision the GreetingServiceImpl in the cluster
+    // some node that provision the GreetingServiceImpl in the cluster.
     Microservices.builder()
           .seeds(seed.cluster().address())
           .services(new GreetingServiceImpl())
           .build();
     
-    // create Rapidoid HTTP gateway as specify the routes to the service(s)
-    RapidoidHttpGateway gateway = RapidoidHttpGateway.builder()
-        .port(8080)
+    // create Rapidoid HTTP gateway and specify the routes to the service(s).
+    RapidoidHttpGateway.builder().port(8080)
         .proxy(seed.dispatcher().create())
         .routes(new ApiRoutes()
-            .addRoute("POST", "/hello-world-service/sayHello", "hello-world-service", "sayHello", GreetingRequest.class)
+            .addRoute("POST", "/hello-world-service/sayHello",    "hello-world-service", "sayHello", GreetingRequest.class)
             .addRoute("POST", "/hello-world-service/sayHello-v1", "hello-world-service", "sayHello", GreetingRequest.class))
         .build();
 
   }
 
-  
   private static void internalWebServer() {
     String content =
           new BufferedReader(new InputStreamReader(Main.class.getResourceAsStream("/index.html"))).lines()
