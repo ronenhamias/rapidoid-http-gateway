@@ -2,7 +2,7 @@
 Example project - kick starter project implementing http gateway using rapidoid http project.
 
 
-# how to use:
+# How to use:
 
 ``` java
 
@@ -25,3 +25,14 @@ RapidoidHttpGateway.builder().port(8080)
         
 
 ```
+
+# How to run this example project.
+
+After cloning the project and adding it to your favorite IDE:
+
+* run the Main as java application.
+* open your browser and open the url http://localhost:8080 (this will open the index.html)
+
+the index.html makes 3 XHR(POST) requests to the hello world service via the defined HTTP routes.
+
+ 
