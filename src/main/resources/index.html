@@ -17,6 +17,11 @@
     xmlhttp.setRequestHeader("Content-Type", "application/json");
     xmlhttp.send(JSON.stringify({name:"ronen-v1"}));
     
+    var xmlhttp = new XMLHttpRequest();   // new HttpRequest instance
+    xmlhttp.open("POST", "http://localhost:8080/hello-world-service/sayHello-v1");
+    xmlhttp.setRequestHeader("Content-Type", "application/json");
+    xmlhttp.send();
+    
 </script>
 </body>
 </html>

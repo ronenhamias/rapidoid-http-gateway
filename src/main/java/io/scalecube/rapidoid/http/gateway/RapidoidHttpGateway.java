@@ -33,10 +33,11 @@ public class RapidoidHttpGateway {
 
       routes.all().forEach(route -> {
         On.port(port).route(route.verb(), route.httpRoute()).plain(req -> {
+
           req.async();
 
           proxy.invoke(toMessage(route, req)).whenComplete((success, error) -> {
-            if (success != null) {
+            if (success != null) { // success
               try {
                 byte[] responseData = serialization.serialize(success.data(), success.data().getClass());
                 IO.write(req.response().out(), responseData);
@@ -45,8 +46,7 @@ public class RapidoidHttpGateway {
                 IO.write(req.response().out(), toErrorResponse(e));
                 req.done();
               }
-            } else {
-              // handle service call error
+            } else { // error
               IO.write(req.response().out(), toErrorResponse(error));
               req.done();
             }
@@ -63,7 +63,7 @@ public class RapidoidHttpGateway {
       try {
         if (ex != null) {
           return serialization.serialize(new ServiceRequestError(ex.getMessage()), ServiceRequestError.class);
-        } else{
+        } else {
           return serialization.serialize(new ServiceRequestError("no reason specified"), ServiceRequestError.class);
         }
       } catch (Exception e1) {

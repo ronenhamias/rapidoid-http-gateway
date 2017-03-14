@@ -6,10 +6,16 @@ import io.scalecube.services.example.api.HelloWorldService;
 
 import java.util.concurrent.CompletableFuture;
 
-public class GreetingServiceImpl implements HelloWorldService{
+public class GreetingServiceImpl implements HelloWorldService {
 
   public CompletableFuture<GreetingResponse> sayHello(GreetingRequest request) {
-    String responseMessage = "greetings: " + request.name();
+    String responseMessage;
+    if (request == null) {
+      responseMessage = "greetings: unknown";
+      System.out.println(responseMessage);
+    } else {
+      responseMessage = "greetings: " + request.name();
+    }
     System.out.println(responseMessage);
     return CompletableFuture.completedFuture(new GreetingResponse(responseMessage));
   }
