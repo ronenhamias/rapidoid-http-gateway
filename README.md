@@ -26,7 +26,7 @@ RapidoidHttpGateway.builder().port(8080)
 
 ```
 
-# How to run this example project.
+# How to run the single jvm example project.
 
 After cloning the project and adding it to your favorite IDE:
 
@@ -35,4 +35,19 @@ After cloning the project and adding it to your favorite IDE:
 
 The src/main/resources/index.html makes 3 XHR(POST) requests to the hello world service via the defined HTTP routes.
 
- 
+
+
+# How to run the distributed example project.
+
+After cloning the project and adding it to your favorite IDE:
+
+* run the SeedMain as java application its ip will be printed in the console.
+* configure the seed ip in the ServiceMain and in the GatewayMain as seed.
+* run the ServiceMain as java application (you can run more then one instance).
+* run the GatewayMain as java application.
+* open your browser and open the url http://localhost:8080 (this will open the index.html)
+
+The src/main/resources/index.html makes 3 XHR(POST) requests to the hello world service via the defined HTTP routes.
+
+* NOTE: if running more than one ServiceMain instance you should see how service requests are distributed/balanced over the service cluster.
+
