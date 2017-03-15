@@ -1,10 +1,11 @@
-package io.scalecube;
+package io.scalecube.distributed.example;
 
+import io.scalecube.Main;
 import io.scalecube.rapidoid.http.gateway.ApiRoutes;
 import io.scalecube.rapidoid.http.gateway.RapidoidHttpGateway;
 import io.scalecube.services.Microservices;
-import io.scalecube.services.example.GreetingServiceImpl;
 import io.scalecube.services.example.api.GreetingRequest;
+import io.scalecube.transport.Address;
 
 import org.rapidoid.setup.On;
 
@@ -12,31 +13,30 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.stream.Collectors;
 
-public class Main {
+public class GatewayMain {
 
-  
   public static void main(String[] args) {
-  
-    // run this main() as java application and in the browser call http://localhost:8080/
+    
+ // run this main() as java application and in the browser call http://localhost:8080/
     internalWebServer();
     
-    // seed node to the cluster.
-    Microservices seed = Microservices.builder().build();
-
-    // some node that provision the GreetingServiceImpl in the cluster.
-    Microservices.builder()
-          .seeds(seed.cluster().address())
-          .services(new GreetingServiceImpl())
-          .build();
+    // seed node to the cluster on known port 8000.
+    Microservices gateway = Microservices.builder()
+         .seeds(Address.create("10.150.4.47",8000))
+         .build();
+    
+    System.out.println( gateway.cluster().members());
     
     // create Rapidoid HTTP gateway and specify the routes to the service(s).
     RapidoidHttpGateway.builder().port(8080)
-        .proxy(seed.dispatcher().create())
+        .proxy(gateway.dispatcher().create())
         .routes(new ApiRoutes()
             .addRoute("POST", "/hello-world-service/sayHello",    "hello-world-service", "sayHello", GreetingRequest.class)
             .addRoute("POST", "/hello-world-service/sayHello-v1", "hello-world-service", "sayHello", GreetingRequest.class))
         .build();
 
+   
+    
   }
 
   private static void internalWebServer() {
@@ -45,5 +45,5 @@ public class Main {
               .collect(Collectors.joining("\n"));
       On.port(8080).get("/").html(content);
   }
-
+  
 }
