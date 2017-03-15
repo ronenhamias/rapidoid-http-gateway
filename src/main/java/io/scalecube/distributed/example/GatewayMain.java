@@ -17,12 +17,12 @@ public class GatewayMain {
 
   public static void main(String[] args) {
     
- // run this main() as java application and in the browser call http://localhost:8080/
+    // run this main() as java application and in the browser call http://localhost:8080/
     internalWebServer();
-    
+
     // seed node to the cluster on known port 8000.
     Microservices gateway = Microservices.builder()
-         .seeds(Address.create("10.150.4.47",8000))
+         .seeds(Address.create(Configuration.seedIp,8000)) 
          .build();
     
     System.out.println( gateway.cluster().members());
