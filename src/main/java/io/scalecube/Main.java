@@ -33,8 +33,8 @@ public class Main {
     RapidoidHttpGateway.builder().port(8080)
         .proxy(seed.dispatcher().create())
         .routes(new ApiRoutes()
-            .addRoute("POST", "/hello-world-service/sayHello",    "hello-world-service", "sayHello", GreetingRequest.class)
-            .addRoute("POST", "/hello-world-service/sayHello-v1", "hello-world-service", "sayHello", GreetingRequest.class))
+            .post("/hello-world-service/sayHello", "hello-world-service", "sayHello", GreetingRequest.class)
+            .post("/hello-world-service/sayHello-v1", "hello-world-service", "sayHello", GreetingRequest.class))
         .build();
 
   }

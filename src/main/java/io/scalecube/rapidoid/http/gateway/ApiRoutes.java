@@ -4,8 +4,6 @@ import io.scalecube.serialization.JsonMessageSerialization;
 import io.scalecube.serialization.MessageSerialization;
 import io.scalecube.services.ServiceDefinition;
 import io.scalecube.services.annotations.AnnotationServiceProcessor;
-import io.scalecube.services.annotations.Service;
-import io.scalecube.services.annotations.ServiceMethod;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,15 +12,17 @@ public class ApiRoutes {
 
   private static MessageSerialization serialization = new JsonMessageSerialization();
   private static byte[] GET_BODY_DEFAULT_PAYLOAD = new byte[]{}; 
+  private final List<Route> routes = new ArrayList<>();;
   
   static final class Route {
 
-    private String verb = "GET";
+    private String verb = "POST";
     private String httpRoute = "/";
-
     private String toServiceName;
     private String toMethodName;
     private Class<?> requestType;
+
+
 
     public Route(String verb, String httpRoute, String toServiceName, String toMethodName, Class<?> requestType) {
       this.verb = verb;
@@ -54,8 +54,6 @@ public class ApiRoutes {
       return this.requestType;
     }
 
-
-
     public Object parse(byte[] data) {
       try {
         return serialization.deserialize(data, requestType());
@@ -63,18 +61,23 @@ public class ApiRoutes {
       }
       return GET_BODY_DEFAULT_PAYLOAD;
     }
-
   }
 
-  final List<Route> routes = new ArrayList<>();
-
+  public ApiRoutes post(String httpRoute, String toServiceName, String toMethodName, Class<?> requestType) {
+    return this.addRoute("POST", httpRoute, toServiceName, toMethodName, requestType);
+  }
+  
+  public ApiRoutes get(String httpRoute, String toServiceName, String toMethodName, Class<?> requestType) {
+    return this.addRoute("GET", httpRoute, toServiceName, toMethodName, requestType);
+  }
+  
   public ApiRoutes addRoute(String verb, String httpRoute, String toServiceName, String toMethodName,
       Class<?> requestType) {
-    routes.add(new Route(verb, httpRoute, toServiceName, toMethodName, requestType));
+    this.routes.add(new Route(verb, httpRoute, toServiceName, toMethodName, requestType));
     return this;
   }
 
-  public ApiRoutes addRoutes(Class<?> service) {
+  private ApiRoutes addRoutes(Class<?> service) {
     AnnotationServiceProcessor proccessor = new AnnotationServiceProcessor();
     ServiceDefinition serviceInfo = proccessor.introspectServiceInterface(service);
     String serviceName = serviceInfo.serviceName();
@@ -89,13 +92,9 @@ public class ApiRoutes {
       this.addRoute(verb, "/" + serviceName + "/" + methodName, serviceName, methodName, paramClass);
     });
     return this;
-
   }
-
-
 
   public List<Route> all() {
     return routes;
   }
-
 }
