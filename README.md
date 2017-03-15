@@ -51,3 +51,12 @@ The src/main/resources/index.html makes 3 XHR(POST) requests to the hello world 
 
 * NOTE: if running more than one ServiceMain instance you should see how service requests are distributed/balanced over the service cluster.
 
+# run the distributed example from command line:
+
+java -cp target/rapidoid-http-gateway-0.9.1-SNAPSHOT.jar io.scalecube.distributed.example.SeedMain 8000
+expected result: seed will print out the seed ip.
+
+java -cp target/rapidoid-http-gateway-0.9.1-SNAPSHOT.jar io.scalecube.distributed.example.SeedMain 8000
+
+
+

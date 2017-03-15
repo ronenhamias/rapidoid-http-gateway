@@ -15,7 +15,7 @@ public class GreetingServiceImpl implements HelloWorldService {
     } else {
       responseMessage = "greetings: " + request.name();
     }
-    System.out.println(responseMessage);
+    System.out.println(System.currentTimeMillis() +" - "+ responseMessage);
     return CompletableFuture.completedFuture(new GreetingResponse(responseMessage));
   }
 
