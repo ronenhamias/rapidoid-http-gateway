@@ -2,26 +2,59 @@
 <html lang="en">
 <head>
 </head>
+<script type="text/javascript" src="http://www.leapbeyond.com/ric/jsUtils/TaskQueue.js"></script>
 <body>
 
 <script>
+	
+	function xhr(url, json) {
+    	var xhr = new XMLHttpRequest();   // new HttpRequest instance
+	    xhr.onreadystatechange = function() {
+		    if (xhr.readyState == XMLHttpRequest.DONE) {
+		    	console.log(xhr.responseText);
+		    }
+		}
 
-    var xmlhttp = new XMLHttpRequest();   // new HttpRequest instance
-    xmlhttp.open("POST", "http://localhost:8080/hello-world-service/sayHello");
-    xmlhttp.setRequestHeader("Content-Type", "application/json");
-    xmlhttp.send(JSON.stringify({name:"ronen"}));
-
-
-	var xmlhttp = new XMLHttpRequest();   // new HttpRequest instance
-    xmlhttp.open("POST", "http://localhost:8080/hello-world-service/sayHello-v1");
-    xmlhttp.setRequestHeader("Content-Type", "application/json");
-    xmlhttp.send(JSON.stringify({name:"ronen-v1"}));
+	    xhr.open("POST", url);
+	    xhr.setRequestHeader("Content-Type", "application/json");
+	   
+	    if(json != "") {
+	    	xhr.send(JSON.stringify(json));
+	    } else {
+	    	xhr.send();
+	    }
+	}
+	
+	
+	function execute(callback){
+		
+		xhr("http://localhost:8080/hello-world-service/sayHello", {name:"ronen"});
+    	xhr("http://localhost:8080/hello-world-service/sayHello", {name:"ronen-v1"});
+    	xhr("http://localhost:8080/hello-world-service/sayHello", "");  
+    	callback("done");       
+	};
+	
+	var taskQueue = new TaskQueue();
+	
+	// Custom tasks
+    MessageTask = function(msg, callback) {
+      this.taskId = null; // set when scheduled
+      this.msg = msg;
+      this.priority = 1;
+      this.description = "Display message '" + msg + "'";
+      MessageTask.prototype.run = function() {
+        execute(callback);
+      }
+    }
     
-    var xmlhttp = new XMLHttpRequest();   // new HttpRequest instance
-    xmlhttp.open("POST", "http://localhost:8080/hello-world-service/sayHello-v1");
-    xmlhttp.setRequestHeader("Content-Type", "application/json");
-    xmlhttp.send();
-    
+    var callback= function(msg){
+    	taskQueue.schedule(new MessageTask("execute xhr"));
+    };
+    	
+	taskQueue.schedule(new MessageTask("execute xhr", callback));
+
+
+	
 </script>
 </body>
 </html>

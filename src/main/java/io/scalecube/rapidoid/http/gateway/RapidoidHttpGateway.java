@@ -32,7 +32,7 @@ public class RapidoidHttpGateway {
       routes.all().forEach(route -> {
         On.port(port).route(route.verb(), route.httpRoute()).plain(req -> {
           req.async();
-
+                 
           proxy.invoke(toMessage(route, req)).whenComplete((success, error) -> {
             if (success != null) { // success
               try {
